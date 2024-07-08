@@ -25,12 +25,15 @@ OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 # Executable name
 EXEC = maze
 
+# Libraries
+LIBS = -lm
+
 # Make all
 all: $(EXEC)
 
 # Linking executable
 $(EXEC): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(EXEC) $(SDL_FLAGS)
+	$(CC) $(CFLAGS) $(OBJ) -o $(EXEC) $(SDL_FLAGS) $(LIBS)
 
 # Compiling source files
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
