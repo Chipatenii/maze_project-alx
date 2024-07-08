@@ -105,7 +105,7 @@ This folder contains the SDL2 test file.
 
 - Begin by examining the source files located within the "src" directory and the header files in the "header" directory.
 
-- Duplicate the repository and establish a new branch using the following command: __$ git checkout https://github.com/HBIbidunni/alx-maze_project -b [name_of_new_branch]__.
+- Duplicate the repository and establish a new branch using the following command: __$ git checkout git clone [https://github.com/Chipatenii/maze_project-alx] -b [name_of_new_branch]__.
 
 - Introduce a new feature, resolve any existing bugs, or undertake code refactoring as needed.
 
