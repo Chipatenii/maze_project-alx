@@ -6,6 +6,25 @@
  */
 void render(Game *game)
 {
+    SDL_Rect wallRect, floorRect, ceilingRect;
+    wallRect.x = 0;
+    wallRect.y = 0;
+    wallRect.w = SCREEN_WIDTH;
+    wallRect.h = SCREEN_HEIGHT / 2;
+
+    floorRect.x = 0;
+    floorRect.y = SCREEN_HEIGHT / 2;
+    floorRect.w = SCREEN_WIDTH;
+    floorRect.h = SCREEN_HEIGHT / 2;
+
+    ceilingRect.x = 0;
+    ceilingRect.y = 0;
+    ceilingRect.w = SCREEN_WIDTH;
+    ceilingRect.h = SCREEN_HEIGHT / 2;
+
+    SDL_RenderCopy(game->renderer, game->ceilingTexture, NULL, &ceilingRect);
+    SDL_RenderCopy(game->renderer, game->floorTexture, NULL, &floorRect);
+
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
     SDL_RenderClear(game->renderer);
 
@@ -63,25 +82,14 @@ void render(Game *game)
         else perpWallDist = (mapY - game->posY + (1 - stepY) / 2) / rayDirY;
 
         int lineHeight = (int)(SCREEN_HEIGHT / perpWallDist);
-
         int drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
         if (drawStart < 0) drawStart = 0;
         int drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
         if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
 
-        SDL_Color color;
-        switch (game->map[mapX][mapY]) {
-            case '1':  color = (side == 1) ? (SDL_Color){255, 0, 0, 255} : (SDL_Color){200, 0, 0, 255}; break;
-            case '2':  color = (side == 1) ? (SDL_Color){0, 255, 0, 255} : (SDL_Color){0, 200, 0, 255}; break;
-            case '3':  color = (side == 1) ? (SDL_Color){0, 0, 255, 255} : (SDL_Color){0, 0, 200, 255}; break;
-            case '4':  color = (side == 1) ? (SDL_Color){255, 255, 255, 255} : (SDL_Color){200, 200, 200, 255}; break;
-            default:   color = (side == 1) ? (SDL_Color){255, 255, 0, 255} : (SDL_Color){200, 200, 0, 255}; break;
-        }
-
-        SDL_SetRenderDrawColor(game->renderer, color.r, color.g, color.b, color.a);
-        SDL_RenderDrawLine(game->renderer, x, drawStart, x, drawEnd);
+        SDL_Rect wallRect = {x, drawStart, 1, drawEnd - drawStart};
+        SDL_RenderCopy(game->renderer, game->wallTexture, NULL, &wallRect);
     }
 
     SDL_RenderPresent(game->renderer);
 }
-

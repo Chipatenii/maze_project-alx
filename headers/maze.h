@@ -25,6 +25,7 @@
  * @planeX: The X plane vector.
  * @planeY: The Y plane vector.
  */
+
 typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
@@ -37,15 +38,18 @@ typedef struct {
     double dirY;
     double planeX;
     double planeY;
+    SDL_Texture *wallTexture;
+    SDL_Texture *floorTexture;
+    SDL_Texture *ceilingTexture;
 } Game;
 
 bool initSDL(Game *game);
 void closeSDL(Game *game);
 void render(Game *game);
 void handleInput(Game *game, bool *running);
-void loadMap(Game *game);
+bool parseMap(Game *game, const char *filename);
 void movePlayer(Game *game, double moveSpeed);
 void rotatePlayer(Game *game, double rotSpeed);
-bool parseMap(Game *game, const char *filename);
+bool loadTextures(Game *game);
 
 #endif // MAZE_H
