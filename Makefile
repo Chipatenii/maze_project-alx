@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -pedantic
+CFLAGS = -Wall -Wextra -pedantic `sdl2-config --cflags`
 LIBS = `sdl2-config --libs` -lSDL2_image -lm
 
 SRCDIR = src
@@ -15,13 +15,13 @@ TARGET = $(BINDIR)/maze
 all: $(TARGET)
 
 $(TARGET): $(OBJ) | $(BINDIR)
-	$(CC) $(CFLAGS) $(LIBS) $^ -o $@
+    $(CC) $(CFLAGS) $(LIBS) $^ -o $@
 
 $(BINDIR)/%.o: $(SRCDIR)/%.c | $(BINDIR)
-	$(CC) $(CFLAGS) -c $< -o $@
+    $(CC) $(CFLAGS) -c $< -o $@
 
 $(BINDIR):
-	mkdir -p $(BINDIR)
+    mkdir -p $(BINDIR)
 
 clean:
-	rm -rf $(BINDIR)
+    rm -rf $(BINDIR)
