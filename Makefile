@@ -1,48 +1,36 @@
-# Compiler
 CC = gcc
-
-# Compiler flags
 CFLAGS = -Wall -Werror -Wextra -pedantic
+LIBS = `sdl2-config --cflags --libs` -lSDL2_image -lm
 
-# SDL flags
-SDL_FLAGS = `sdl2-config --cflags --libs`
+SRCDIR = src
+INCDIR = headers
+BINDIR = bin
+OBJDIR = obj
 
-# Source files directory
-SRC_DIR = ./src
+SRC = $(wildcard $(SRCDIR)/*.c)
+OBJ = $(SRC:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+DEP = $(OBJ:%.o=%.d)
 
-# Header files directory
-INC_DIR = ./headers
+TARGET = $(BINDIR)/maze
 
-# Object files directory
-OBJ_DIR = ./obj
+.PHONY: all clean
 
-# Source files
-SRC = $(wildcard $(SRC_DIR)/*.c)
+all: $(TARGET)
 
-# Object files
-OBJ = $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+$(TARGET): $(OBJ) | $(BINDIR)
+	$(CC) $(CFLAGS) $(LIBS) $^ -o $@
 
-# Executable name
-EXEC = maze
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+	$(CC) $(CFLAGS) -MMD -MP -c $< -o $@ $(LIBS)
 
-# Libraries
-LIBS = -lm
+-include $(DEP)
 
-# Make all
-all: $(EXEC)
+$(OBJDIR):
+	mkdir -p $(OBJDIR)
 
-# Linking executable
-$(EXEC): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $(EXEC) $(SDL_FLAGS) $(LIBS)
+$(BINDIR):
+	mkdir -p $(BINDIR)
 
-# Compiling source files
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
-	$(CC) $(CFLAGS) -I$(INC_DIR) -c $< -o $@ $(SDL_FLAGS)
-
-# Create object directory
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
-
-# Clean
 clean:
-	rm -rf $(OBJ_DIR) $(EXEC)
+	rm -rf $(OBJDIR) $(BINDIR)
+

@@ -3,29 +3,33 @@
 /**
  * main - Entry point for the maze game.
  *
- * Return: 0 on success, 1 on failure.
+ * This function initializes SDL, parses the game map, and starts the game loop.
+ *
+ * Return: 0 on success, non-zero on failure.
  */
-int main(void)
+int main(int argc, char *argv[])
 {
     Game game;
     bool running = true;
 
+    /*Initialize SDL and check for initialization success*/
     if (!initSDL(&game)) {
-        printf("Failed to initialize SDL\n");
         return 1;
     }
 
-    if (!parseMap(&game, "maps/map1.txt")) {
-        printf("Failed to load map\n");
+    /*Parse the game map from file*/
+    if (!parseMap(&game, "map/map1.txt")) {
         closeSDL(&game);
         return 1;
     }
 
+    /*Game loop*/
     while (running) {
         handleInput(&game, &running);
         render(&game);
     }
 
+    /*Clean up and exit*/
     closeSDL(&game);
     return 0;
 }

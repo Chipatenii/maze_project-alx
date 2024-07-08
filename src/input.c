@@ -1,36 +1,32 @@
 #include "../headers/maze.h"
 
 /**
- * handleInput - Handles user input.
+ * handleInput - Handles user input for moving and rotating the player.
  * @game: A pointer to the Game structure.
  * @running: A pointer to the running flag.
  */
 void handleInput(Game *game, bool *running)
 {
-    const double moveSpeed = 0.05;
-    const double rotSpeed = 0.05;
-    SDL_Event e;
-    while (SDL_PollEvent(&e) != 0) {
-        if (e.type == SDL_QUIT) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT) {
             *running = false;
-        } else if (e.type == SDL_KEYDOWN) {
-            switch (e.key.keysym.sym) {
+        }
+        if (event.type == SDL_KEYDOWN) {
+            switch (event.key.keysym.sym) {
                 case SDLK_w:
-                    movePlayer(game, moveSpeed);
+                    movePlayer(game, 0.1);
                     break;
                 case SDLK_s:
-                    movePlayer(game, -moveSpeed);
+                    movePlayer(game, -0.1);
                     break;
                 case SDLK_a:
-                    rotatePlayer(game, -rotSpeed);
+                    rotatePlayer(game, -0.1);
                     break;
                 case SDLK_d:
-                    rotatePlayer(game, rotSpeed);
-                    break;
-                default:
+                    rotatePlayer(game, 0.1);
                     break;
             }
         }
     }
 }
-

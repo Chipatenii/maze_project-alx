@@ -1,82 +1,55 @@
 #include "../headers/maze.h"
 
 /**
- * render - Renders the game state to the screen.
+ * loadTextures - Loads textures for the game (walls, floor, ceiling).
+ * @game: A pointer to the Game structure.
+ *
+ * Return: true if successful, false otherwise.
+ */
+bool loadTextures(Game *game)
+{
+    /*Load wall texture*/
+    game->textures[0] = IMG_LoadTexture(game->renderer, "images/wall.bmp");
+    if (!game->textures[0]) {
+        printf("Failed to load wall texture: %s\n", IMG_GetError());
+        return false;
+    }
+
+    /*Load floor texture*/
+    game->textures[1] = IMG_LoadTexture(game->renderer, "images/floor.bmp");
+    if (!game->textures[1]) {
+        printf("Failed to load floor texture: %s\n", IMG_GetError());
+        return false;
+    }
+
+    /*Load ceiling */
+    game->textures[2] = IMG_LoadTexture(game->renderer, "images/ceiling.bmp");
+    if (!game->textures[2]) {
+        printf("Failed to load ceiling texture: %s\n", IMG_GetError());
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * render - Renders the game scene.
  * @game: A pointer to the Game structure.
  */
 void render(Game *game)
 {
+    /*Clear the renderer*/
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
     SDL_RenderClear(game->renderer);
 
-    SDL_Rect floorRect = {0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT / 2};
-    SDL_RenderCopy(game->renderer, game->floorTexture, NULL, &floorRect);
-
-    SDL_Rect ceilingRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 2};
-    SDL_RenderCopy(game->renderer, game->ceilingTexture, NULL, &ceilingRect);
-
+    /*Example code for rendering walls*/
     for (int x = 0; x < SCREEN_WIDTH; x++) {
-        double cameraX = 2 * x / (double)SCREEN_WIDTH - 1;
-        double rayDirX = game->dirX + game->planeX * cameraX;
-        double rayDirY = game->dirY + game->planeY * cameraX;
-
-        int mapX = (int)game->posX;
-        int mapY = (int)game->posY;
-
-        double sideDistX;
-        double sideDistY;
-
-        double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
-        double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
-        double perpWallDist;
-
-        int stepX;
-        int stepY;
-
-        int hit = 0;
-        int side;
-
-        if (rayDirX < 0) {
-            stepX = -1;
-            sideDistX = (game->posX - mapX) * deltaDistX;
-        } else {
-            stepX = 1;
-            sideDistX = (mapX + 1.0 - game->posX) * deltaDistX;
-        }
-
-        if (rayDirY < 0) {
-            stepY = -1;
-            sideDistY = (game->posY - mapY) * deltaDistY;
-        } else {
-            stepY = 1;
-            sideDistY = (mapY + 1.0 - game->posY) * deltaDistY;
-        }
-
-        while (hit == 0) {
-            if (sideDistX < sideDistY) {
-                sideDistX += deltaDistX;
-                mapX += stepX;
-                side = 0;
-            } else {
-                sideDistY += deltaDistY;
-                mapY += stepY;
-                side = 1;
-            }
-            if (game->map[mapX][mapY] > '0') hit = 1;
-        }
-
-        if (side == 0) perpWallDist = (mapX - game->posX + (1 - stepX) / 2) / rayDirX;
-        else perpWallDist = (mapY - game->posY + (1 - stepY) / 2) / rayDirY;
-
-        int lineHeight = (int)(SCREEN_HEIGHT / perpWallDist);
-        int drawStart = -lineHeight / 2 + SCREEN_HEIGHT / 2;
-        if (drawStart < 0) drawStart = 0;
-        int drawEnd = lineHeight / 2 + SCREEN_HEIGHT / 2;
-        if (drawEnd >= SCREEN_HEIGHT) drawEnd = SCREEN_HEIGHT - 1;
-
-        SDL_Rect wallRect = {x, drawStart, 1, drawEnd - drawStart};
-        SDL_RenderCopy(game->renderer, game->wallTexture, NULL, &wallRect);
+        /*Example: rendering walls*/
+        SDL_Rect wallRect = { x, drawStart, 1, drawEnd - drawStart };
+        SDL_RenderCopy(game->renderer, game->textures[0], NULL, &wallRect);
     }
 
+
+    /*Present the renderer*/
     SDL_RenderPresent(game->renderer);
 }
