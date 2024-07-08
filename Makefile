@@ -15,13 +15,13 @@ TARGET = $(BINDIR)/maze
 all: $(TARGET)
 
 $(TARGET): $(OBJ) | $(BINDIR)
-    $(CC) $(CFLAGS) $(LIBS) $^ -o $@
+	$(CC) $(CFLAGS) $(LIBS) $^ -o $@
 
 $(BINDIR)/%.o: $(SRCDIR)/%.c | $(BINDIR)
-    $(CC) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
 $(BINDIR):
-    mkdir -p $(BINDIR)
+	mkdir -p $(BINDIR)
 
 clean:
-    rm -rf $(BINDIR)
+	rm -rf $(BINDIR)
