@@ -1,7 +1,7 @@
 The ALX Project - The Maze Game
 --------------
 
-![image](https:)
+![image]([https:](https://github.com/Chipatenii/maze_project-alx/blob/main/images/wall.bmp)
 
 The goal of this __Maze Game Project__ is to create a 3D game using the raycasting technique.
 Raycasting is a rendering technique used in computer graphics to simulate
