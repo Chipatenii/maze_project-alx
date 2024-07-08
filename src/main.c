@@ -1,37 +1,31 @@
 #include "../headers/maze.h"
 
 /**
- * main - Entry point
- * @argc: Number of arguments passed to the program
- * @argv: Pointer to string arguments passed to the program
- * Return: (0) on success, exits with failure status on failure
+ * main - Entry point for the maze game.
+ *
+ * Return: 0 on success, 1 on failure.
  */
-int main(int argc, char **argv)
+int main(void)
 {
-	sdl_instance sdl = {NULL, NULL, NULL, NULL, NULL, NULL};
-	map_t map;
-	char *map_path;
+    Game game;
+    bool running = true;
 
-	if (argc < 2)
-	{
-		printf("Usage: %s 'map_path'", argv[0]);
-		exit(EXIT_FAILURE);
-	}
-	map_path = concat("maps/", argv[1]);
-	map = handle_file(map_path);
+    if (!initSDL(&game)) {
+        printf("Failed to initialize SDL\n");
+        return 1;
+    }
 
-	if (SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		printf("SDL could not initialize! SDL_Error:%s\n", SDL_GetError());
-		exit(EXIT_FAILURE);
-	}
+    if (!parseMap(&game, "maps/map1.txt")) {
+        printf("Failed to load map\n");
+        closeSDL(&game);
+        return 1;
+    }
 
-	create_window(WINDOW_TITLE, &sdl);
-	create_renderer(&sdl);
+    while (running) {
+        handleInput(&game, &running);
+        render(&game);
+    }
 
-	game_event_loop(&sdl, &map);
-	free_map(&map);
-	safe_close_sdl(&sdl);
-
-	return (0);
+    closeSDL(&game);
+    return 0;
 }

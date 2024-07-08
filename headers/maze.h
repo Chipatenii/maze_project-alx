@@ -1,44 +1,51 @@
 #ifndef MAZE_H
 #define MAZE_H
 
-#ifdef LINUX
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_thread.h>
-#elif defined(MAC)
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_thread.h>
-#else
-#include <SDL.h>
-#include <SDL_thread.h>
-#endif
-
+#include <stdbool.h>
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
-#include "structures.h"
-#include "macros.h"
-#include "parser.h"
-#include "player.h"
-#include "texture.h"
-#include "raycast.h"
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
 
+/**
+ * struct Game - Represents the game state.
+ * @window: The SDL window.
+ * @renderer: The SDL renderer.
+ * @mapWidth: The width of the map.
+ * @mapHeight: The height of the map.
+ * @map: The map represented as a 2D array.
+ * @posX: The player's X position.
+ * @posY: The player's Y position.
+ * @dirX: The X direction vector.
+ * @dirY: The Y direction vector.
+ * @planeX: The X plane vector.
+ * @planeY: The Y plane vector.
+ */
+typedef struct {
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    int mapWidth;
+    int mapHeight;
+    char **map;
+    double posX;
+    double posY;
+    double dirX;
+    double dirY;
+    double planeX;
+    double planeY;
+} Game;
 
-void create_window(char *name, sdl_instance *sdl);
-void safe_close_sdl(sdl_instance *sdl);
-void create_renderer(sdl_instance *sdl);
-void print_sdl_error(void);
+bool initSDL(Game *game);
+void closeSDL(Game *game);
+void render(Game *game);
+void handleInput(Game *game, bool *running);
+void loadMap(Game *game);
+void movePlayer(Game *game, double moveSpeed);
+void rotatePlayer(Game *game, double rotSpeed);
+bool parseMap(Game *game, const char *filename);
 
-void game_event_loop(sdl_instance *sdl, map_t *map);
-void poll_events(int *quit, SDL_Event *e, player *player, SDL_Point *mouse,
-		SDL_bool *map_active);
-
-void draw_2d_map(sdl_instance *sdl, map_t *map);
-void send_frame(sdl_instance *sdl);
-
-
-SDL_Point rotate_point(const SDL_Point *point, float cx, float cy, float deg,
-		float ray_size);
-
-#endif
+#endif // MAZE_H
