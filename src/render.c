@@ -6,27 +6,14 @@
  */
 void render(Game *game)
 {
-    SDL_Rect wallRect, floorRect, ceilingRect;
-    wallRect.x = 0;
-    wallRect.y = 0;
-    wallRect.w = SCREEN_WIDTH;
-    wallRect.h = SCREEN_HEIGHT / 2;
-
-    floorRect.x = 0;
-    floorRect.y = SCREEN_HEIGHT / 2;
-    floorRect.w = SCREEN_WIDTH;
-    floorRect.h = SCREEN_HEIGHT / 2;
-
-    ceilingRect.x = 0;
-    ceilingRect.y = 0;
-    ceilingRect.w = SCREEN_WIDTH;
-    ceilingRect.h = SCREEN_HEIGHT / 2;
-
-    SDL_RenderCopy(game->renderer, game->ceilingTexture, NULL, &ceilingRect);
-    SDL_RenderCopy(game->renderer, game->floorTexture, NULL, &floorRect);
-
     SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
     SDL_RenderClear(game->renderer);
+
+    SDL_Rect floorRect = {0, SCREEN_HEIGHT / 2, SCREEN_WIDTH, SCREEN_HEIGHT / 2};
+    SDL_RenderCopy(game->renderer, game->floorTexture, NULL, &floorRect);
+
+    SDL_Rect ceilingRect = {0, 0, SCREEN_WIDTH, SCREEN_HEIGHT / 2};
+    SDL_RenderCopy(game->renderer, game->ceilingTexture, NULL, &ceilingRect);
 
     for (int x = 0; x < SCREEN_WIDTH; x++) {
         double cameraX = 2 * x / (double)SCREEN_WIDTH - 1;
