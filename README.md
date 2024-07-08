@@ -125,4 +125,4 @@ For this project, a game engine was not required.
 - __Innocent Manda__ - [Github](https://github.com/chipatenii)/ [Contact Me](mailto:innocentmanda70@gmail.com)
 
 ## The 3D Maze Game Project Demo(click :point_down:)
-[![The 3D Maze Project](https://img.youtube.com/vi/qoXFZv-hLW0/0.jpg)](https://www.youtube.com/watch?v=qoXFZv-hLW0)
+[![The 3D Maze Project]()](https://www)
