@@ -1,37 +1,32 @@
 #include "../headers/maze.h"
 
 /**
- * main - Entry point for the maze game.
+ * main - Entry point of the program.
+ * @argc: Argument count.
+ * @argv: Argument vector.
  *
- * This function initializes SDL, sets up the game, and starts the game loop.
- *
- * Return: 0 on success, non-zero on failure.
+ * Return: 0 on success, or an error code on failure.
  */
 int main(int argc, char *argv[])
 {
+    (void)argc;  // Mark argc as used to avoid compiler warning
+    (void)argv;  // Mark argv as used to avoid compiler warning
+
     Game game;
     bool running = true;
 
-    /* Initialize SDL and check for initialization success */
     if (!initSDL(&game))
-    {
-        printf("Failed to initialize!\n");
         return 1;
-    }
 
-    /* Simple hardcoded map */
+    game.player.posX = 22.0;
+    game.player.posY = 12.0;
+    game.player.dirX = -1.0;
+    game.player.dirY = 0.0;
+    game.player.planeX = 0.0;
+    game.player.planeY = 0.66;
+
     int map[MAP_WIDTH][MAP_HEIGHT] = {
         {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
