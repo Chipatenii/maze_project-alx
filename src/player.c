@@ -1,32 +1,29 @@
 #include "../headers/maze.h"
 
 /**
- * movePlayer - Moves the player forward or backward.
+ * updatePlayer - Updates the player's position and direction based on input.
  * @game: A pointer to the Game structure.
- * @moveSpeed: The speed at which to move the player.
  */
-void movePlayer(Game *game, double moveSpeed)
-{
-    // Check collision with walls before moving
-    if (game->map[(int)(game->posX + game->dirX * moveSpeed)][(int)(game->posY)] == '0') {
-        game->posX += game->dirX * moveSpeed;
-    }
-    if (game->map[(int)(game->posX)][(int)(game->posY + game->dirY * moveSpeed)] == '0') {
-        game->posY += game->dirY * moveSpeed;
-    }
-}
+void updatePlayer(Game *game) {
+    double moveSpeed = 0.1;
+    double rotSpeed = 0.05;
 
-/**
- * rotatePlayer - Rotates the player left or right.
- * @game: A pointer to the Game structure.
- * @rotSpeed: The speed at which to rotate the player.
- */
-void rotatePlayer(Game *game, double rotSpeed)
-{
-    double oldDirX = game->dirX;
-    game->dirX = game->dirX * cos(rotSpeed) - game->dirY * sin(rotSpeed);
-    game->dirY = oldDirX * sin(rotSpeed) + game->dirY * cos(rotSpeed);
-    double oldPlaneX = game->planeX;
-    game->planeX = game->planeX * cos(rotSpeed) - game->planeY * sin(rotSpeed);
-    game->planeY = oldPlaneX * sin(rotSpeed) + game->planeY * cos(rotSpeed);
+    if (game->player.moveForward) {
+        game->player.posX += game->player.dirX * moveSpeed;
+        game->player.posY += game->player.dirY * moveSpeed;
+    }
+    if (game->player.moveBackward) {
+        game->player.posX -= game->player.dirX * moveSpeed;
+        game->player.posY -= game->player.dirY * moveSpeed;
+    }
+    if (game->player.turnLeft) {
+        double oldDirX = game->player.dirX;
+        game->player.dirX = game->player.dirX * cos(-rotSpeed) - game->player.dirY * sin(-rotSpeed);
+        game->player.dirY = oldDirX * sin(-rotSpeed) + game->player.dirY * cos(-rotSpeed);
+    }
+    if (game->player.turnRight) {
+        double oldDirX = game->player.dirX;
+        game->player.dirX = game->player.dirX * cos(rotSpeed) - game->player.dirY * sin(rotSpeed);
+        game->player.dirY = oldDirX * sin(rotSpeed) + game->player.dirY * cos(rotSpeed);
+    }
 }

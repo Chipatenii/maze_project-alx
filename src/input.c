@@ -1,31 +1,28 @@
 #include "../headers/maze.h"
 
 /**
- * handleInput - Handles user input for moving and rotating the player.
+ * handleInput - Processes player input.
  * @game: A pointer to the Game structure.
- * @running: A pointer to the running flag.
+ * @quit: A pointer to the quit flag.
  */
-void handleInput(Game *game, bool *running)
-{
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        if (event.type == SDL_QUIT) {
-            *running = false;
-        }
-        if (event.type == SDL_KEYDOWN) {
-            switch (event.key.keysym.sym) {
-                case SDLK_w:
-                    movePlayer(game, 0.1);
-                    break;
-                case SDLK_s:
-                    movePlayer(game, -0.1);
-                    break;
-                case SDLK_a:
-                    rotatePlayer(game, -0.1);
-                    break;
-                case SDLK_d:
-                    rotatePlayer(game, 0.1);
-                    break;
+void handleInput(Game *game, bool *quit) {
+    SDL_Event e;
+    while (SDL_PollEvent(&e) != 0) {
+        if (e.type == SDL_QUIT) {
+            *quit = true;
+        } else if (e.type == SDL_KEYDOWN) {
+            switch (e.key.keysym.sym) {
+                case SDLK_w: game->player.moveForward = true; break;
+                case SDLK_s: game->player.moveBackward = true; break;
+                case SDLK_a: game->player.turnLeft = true; break;
+                case SDLK_d: game->player.turnRight = true; break;
+            }
+        } else if (e.type == SDL_KEYUP) {
+            switch (e.key.keysym.sym) {
+                case SDLK_w: game->player.moveForward = false; break;
+                case SDLK_s: game->player.moveBackward = false; break;
+                case SDLK_a: game->player.turnLeft = false; break;
+                case SDLK_d: game->player.turnRight = false; break;
             }
         }
     }
