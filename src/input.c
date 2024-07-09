@@ -10,6 +10,26 @@
 void rotatePlayer(Player *player, double angle);
 
 /**
+ * movePlayer - Moves the player forward or backward.
+ * @player: Pointer to the player structure.
+ * @map: Pointer to the game map.
+ * @moveSpeed: Speed at which to move the player.
+ *
+ * Return: void
+ */
+void movePlayer(Player *player, int **map, double moveSpeed);
+
+/**
+ * strafePlayer - Strafes the player left or right.
+ * @player: Pointer to the player structure.
+ * @map: Pointer to the game map.
+ * @moveSpeed: Speed at which to strafe the player.
+ *
+ * Return: void
+ */
+void strafePlayer(Player *player, int **map, double moveSpeed);
+
+/**
  * handleInput - Handles input events and updates the game state accordingly.
  * @game: Pointer to the game structure.
  * @running: Pointer to the running flag.
