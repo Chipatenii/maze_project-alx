@@ -1,71 +1,76 @@
 #include "../headers/maze.h"
 
 /**
- * handleInput - Handles user input and updates the game state accordingly.
- * @game: A pointer to the Game structure.
- * @running: A pointer to the running flag.
+ * rotatePlayer - Rotates the player by a given angle.
+ * @player: Pointer to the player structure.
+ * @angle: Angle by which to rotate the player.
+ *
+ * Return: void
+ */
+void rotatePlayer(Player *player, double angle);
+
+/**
+ * handleInput - Handles input events and updates the game state accordingly.
+ * @game: Pointer to the game structure.
+ * @running: Pointer to the running flag.
+ *
+ * Return: void
  */
 void handleInput(Game *game, bool *running)
 {
-    SDL_Event e;
-    while (SDL_PollEvent(&e) != 0)
+    SDL_Event event;
+
+    while (SDL_PollEvent(&event))
     {
-        if (e.type == SDL_QUIT)
+        if (event.type == SDL_QUIT)
         {
             *running = false;
         }
-        else if (e.type == SDL_KEYDOWN)
+        else if (event.type == SDL_KEYDOWN)
         {
-            switch (e.key.keysym.sym)
+            switch (event.key.keysym.sym)
             {
-            case SDLK_ESCAPE:
-                *running = false;
-                break;
-            case SDLK_w:
-                if (game->map[(int)(game->player.posX + game->player.dirX * MOVE_SPEED)][(int)(game->player.posY)] == 0)
-                    game->player.posX += game->player.dirX * MOVE_SPEED;
-                if (game->map[(int)(game->player.posX)][(int)(game->player.posY + game->player.dirY * MOVE_SPEED)] == 0)
-                    game->player.posY += game->player.dirY * MOVE_SPEED;
-                break;
-            case SDLK_s:
-                if (game->map[(int)(game->player.posX - game->player.dirX * MOVE_SPEED)][(int)(game->player.posY)] == 0)
-                    game->player.posX -= game->player.dirX * MOVE_SPEED;
-                if (game->map[(int)(game->player.posX)][(int)(game->player.posY - game->player.dirY * MOVE_SPEED)] == 0)
-                    game->player.posY -= game->player.dirY * MOVE_SPEED;
-                break;
-            case SDLK_a:
-                if (game->map[(int)(game->player.posX - game->player.planeX * MOVE_SPEED)][(int)(game->player.posY)] == 0)
-                    game->player.posX -= game->player.planeX * MOVE_SPEED;
-                if (game->map[(int)(game->player.posX)][(int)(game->player.posY - game->player.planeY * MOVE_SPEED)] == 0)
-                    game->player.posY -= game->player.planeY * MOVE_SPEED;
-                break;
-            case SDLK_d:
-                if (game->map[(int)(game->player.posX + game->player.planeX * MOVE_SPEED)][(int)(game->player.posY)] == 0)
-                    game->player.posX += game->player.planeX * MOVE_SPEED;
-                if (game->map[(int)(game->player.posX)][(int)(game->player.posY + game->player.planeY * MOVE_SPEED)] == 0)
-                    game->player.posY += game->player.planeY * MOVE_SPEED;
-                break;
-            case SDLK_LEFT:
-                rotatePlayer(&game->player, -ROTATE_SPEED);
-                break;
-            case SDLK_RIGHT:
-                rotatePlayer(&game->player, ROTATE_SPEED);
-                break;
+                case SDLK_LEFT:
+                    rotatePlayer(&game->player, -ROTATE_SPEED);
+                    break;
+                case SDLK_RIGHT:
+                    rotatePlayer(&game->player, ROTATE_SPEED);
+                    break;
+                case SDLK_w:
+                    movePlayer(&game->player, game->map, MOVE_SPEED);
+                    break;
+                case SDLK_s:
+                    movePlayer(&game->player, game->map, -MOVE_SPEED);
+                    break;
+                case SDLK_a:
+                    strafePlayer(&game->player, game->map, -MOVE_SPEED);
+                    break;
+                case SDLK_d:
+                    strafePlayer(&game->player, game->map, MOVE_SPEED);
+                    break;
+                case SDLK_ESCAPE:
+                    *running = false;
+                    break;
+                default:
+                    break;
             }
         }
     }
 }
 
 /**
- * rotatePlayer - Rotates the player.
- * @player: A pointer to the Player structure.
- * @angle: The angle by which to rotate the player.
+ * rotatePlayer - Rotates the player by a given angle.
+ * @player: Pointer to the player structure.
+ * @angle: Angle by which to rotate the player.
+ *
+ * Return: void
  */
 void rotatePlayer(Player *player, double angle)
 {
     double oldDirX = player->dirX;
     player->dirX = player->dirX * cos(angle) - player->dirY * sin(angle);
     player->dirY = oldDirX * sin(angle) + player->dirY * cos(angle);
+
     double oldPlaneX = player->planeX;
     player->planeX = player->planeX * cos(angle) - player->planeY * sin(angle);
     player->planeY = oldPlaneX * sin(angle) + player->planeY * cos(angle);
