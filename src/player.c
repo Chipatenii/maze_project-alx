@@ -1,29 +1,16 @@
 #include "../headers/maze.h"
 
 /**
- * updatePlayer - Updates the player's position and direction based on input.
- * @game: A pointer to the Game structure.
+ * movePlayer - Moves the player based on input.
+ * @player: A pointer to the Player structure.
+ * @map: The game map.
+ * @moveX: The amount to move in the X direction.
+ * @moveY: The amount to move in the Y direction.
  */
-void updatePlayer(Game *game) {
-    double moveSpeed = 0.1;
-    double rotSpeed = 0.05;
-
-    if (game->player.moveForward) {
-        game->player.posX += game->player.dirX * moveSpeed;
-        game->player.posY += game->player.dirY * moveSpeed;
-    }
-    if (game->player.moveBackward) {
-        game->player.posX -= game->player.dirX * moveSpeed;
-        game->player.posY -= game->player.dirY * moveSpeed;
-    }
-    if (game->player.turnLeft) {
-        double oldDirX = game->player.dirX;
-        game->player.dirX = game->player.dirX * cos(-rotSpeed) - game->player.dirY * sin(-rotSpeed);
-        game->player.dirY = oldDirX * sin(-rotSpeed) + game->player.dirY * cos(-rotSpeed);
-    }
-    if (game->player.turnRight) {
-        double oldDirX = game->player.dirX;
-        game->player.dirX = game->player.dirX * cos(rotSpeed) - game->player.dirY * sin(rotSpeed);
-        game->player.dirY = oldDirX * sin(rotSpeed) + game->player.dirY * cos(rotSpeed);
-    }
+void movePlayer(Player *player, int map[MAP_WIDTH][MAP_HEIGHT], double moveX, double moveY)
+{
+    if (map[(int)(player->posX + moveX)][(int)(player->posY)] == 0)
+        player->posX += moveX;
+    if (map[(int)(player->posX)][(int)(player->posY + moveY)] == 0)
+        player->posY += moveY;
 }

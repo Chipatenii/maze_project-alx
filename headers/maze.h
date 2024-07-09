@@ -2,37 +2,45 @@
 #define MAZE_H
 
 #include <SDL.h>
-#include <stdbool.h>
 #include <SDL_image.h>
-#include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
+#include <math.h>
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+#define MAP_WIDTH 24
+#define MAP_HEIGHT 24
+#define MOVE_SPEED 0.1
+#define ROTATE_SPEED 0.05
+
+typedef struct Textures {
+    SDL_Texture *wall;
+    SDL_Texture *floor;
+    SDL_Texture *ceiling;
+} Textures;
+
+typedef struct Player {
+    double posX, posY; // player position
+    double dirX, dirY; // direction vector
+    double planeX, planeY; // camera plane
+} Player;
 
 typedef struct Game {
     SDL_Window *window;
     SDL_Renderer *renderer;
-    SDL_Texture *textures[3];  /*Array to hold textures for walls, floor, and ceiling*/
-    char **map;                /*2D array representing the game map*/
-    int mapWidth;              /*Width of the game map*/
-    int mapHeight;             /*Height of the game map*/
-    double posX;               /*Player's X position*/
-    double posY;               /*Player's Y position*/
-    double dirX;               /*Player's direction X component*/
-    double dirY;               /*Player's direction Y component*/
-    double planeX;             /*2D camera plane X component*/
-    double planeY;             /*2D camera plane Y component*/
+    Textures textures;
+    Player player;
+    int map[MAP_WIDTH][MAP_HEIGHT];
 } Game;
 
-bool initSDL(Game *game);                                  /*Initializes SDL and game resources*/
-void closeSDL(Game *game);                                 /*Shuts down SDL and frees resources*/
-bool parseMap(Game *game, const char *filename);           /*Parses the game map from a file*/
-void handleInput(Game *game, bool *running);               /*Handles user input*/
-void render(Game *game);                                   /*Renders the game scene*/
-void movePlayer(Game *game, double moveSpeed);             /*Moves the player in the game world*/
-void rotatePlayer(Game *game, double rotSpeed);            /*Rotates the player's view*/
-bool loadTextures(Game *game);                             /*Loads textures for walls, floor, and ceiling*/
+bool initSDL(Game *game);
+SDL_Texture *loadTexture(SDL_Renderer *renderer, const char *path);
+void closeSDL(Game *game);
+bool parseMap(Game *game, const char *filename);
+void handleInput(Game *game, bool *running);
+void updateGame(Game *game);
+void render(Game *game);
+void castRays(Game *game);
 
-#endif
+#endif /* MAZE_H */
