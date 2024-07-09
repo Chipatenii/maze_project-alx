@@ -14,33 +14,24 @@
 #define MOVE_SPEED 0.1
 #define ROTATE_SPEED 0.05
 
-typedef struct Textures {
-    SDL_Texture *wall;
-    SDL_Texture *floor;
-    SDL_Texture *ceiling;
-} Textures;
-
-typedef struct Player {
-    double posX, posY; // player position
-    double dirX, dirY; // direction vector
-    double planeX, planeY; // camera plane
+typedef struct {
+    double x, y;
+    double dirX, dirY;
+    double planeX, planeY;
 } Player;
 
-typedef struct Game {
+typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
-    Textures textures;
+    int map[24][24];
     Player player;
-    int map[MAP_WIDTH][MAP_HEIGHT];
 } Game;
 
-bool initSDL(Game *game);
-SDL_Texture *loadTexture(SDL_Renderer *renderer, const char *path);
+void initSDL(Game *game);
 void closeSDL(Game *game);
-bool parseMap(Game *game, const char *filename);
 void handleInput(Game *game, bool *running);
-void updateGame(Game *game);
-void render(Game *game);
-void castRays(Game *game);
+void movePlayer(Player *player, int map[24][24], double moveSpeed);
+void strafePlayer(Player *player, int map[24][24], double moveSpeed);
+void rotatePlayer(Player *player, double angle);
 
 #endif /* MAZE_H */
