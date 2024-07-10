@@ -1,36 +1,36 @@
-#include "../headers/maze.h"
+#include <SDL2/SDL.h>
+#include "../headers/init.h"
+#include "../headers/input.h"
+#include "../headers/player.h"
+#include "../headers/parser.h"
+#include "../headers/render.h"
 
-/**
- * main - Entry point for the maze game.
- *
- * This function initializes SDL, parses the game map, and starts the game loop.
- *
- * Return: 0 on success, non-zero on failure.
- */
-int main(void)
-{
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+
+int main(int argc, char *argv[]) {
+    SDLContext context;
     Game game;
-    bool running = true;
 
-    /* Initialize SDL and check for initialization success */
-    if (!initSDL(&game)) {
+    if (!initSDL(&context, SCREEN_WIDTH, SCREEN_HEIGHT)) {
         return 1;
     }
 
-    /* Parse the game map from file */
-    if (!parseMap(&game, "map/map1.txt")) {
-        closeSDL(&game);
+    if (!loadMap(&game, "map/map.txt")) {
+        closeSDL(&context);
         return 1;
     }
 
-    /* Game loop */
-    while (running) {
-        handleInput(&game, &running);
-        updateGame(&game);
-        render(&game);
+    game.running = 1;
+    game.player.x = 50;
+    game.player.y = 50;
+    game.player.angle = 0;
+
+    while (game.running) {
+        handleInput(&game);
+        renderGame(&context, &game);
     }
 
-    /* Clean up and exit */
-    closeSDL(&game);
+    closeSDL(&context);
     return 0;
 }

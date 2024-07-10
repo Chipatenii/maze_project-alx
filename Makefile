@@ -1,20 +1,16 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic `sdl2-config --cflags`
 LDFLAGS = `sdl2-config --libs` -lSDL2_image -lm
-SRC = src/init.c src/player.c src/parser.c src/main.c src/input.c src/render.c
+SRC = src/init.c src/input.c src/main.c src/parser.c src/player.c src/render.c
 OBJ = $(SRC:.c=.o)
-BIN = bin
+TARGET = bin/maze
 
-all: $(BIN) $(BIN)/maze
+all: $(TARGET)
 
-$(BIN):
-	mkdir -p $(BIN)
-
-$(BIN)/maze: $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
-
-$(BIN)/%.o: src/%.c
-	$(CC) $(CFLAGS) -c $< -o $@
+$(TARGET): $(OBJ)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJ) $(LDFLAGS)
 
 clean:
-	rm -rf $(BIN)/*.o $(BIN)/maze
+	rm -f $(OBJ) $(TARGET)
+
+.PHONY: all clean

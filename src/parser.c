@@ -1,29 +1,36 @@
-#include "../headers/maze.h"
+#include "../headers/parser.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-/**
- * parseMap - Parse the game map from a file.
- * @game: Pointer to the game structure.
- * @filename: Path to the map file.
- *
- * Return: true if successful, false otherwise.
- */
-bool parseMap(Game *game, const char *filename) {
+#define MAX_MAP_SIZE 100
+
+int loadMap(Game *game, const char *filename) {
     FILE *file = fopen(filename, "r");
     if (!file) {
-        printf("Failed to open map file!\n");
-        return false;
+        perror("Failed to open map file");
+        return 0;
     }
 
-    for (int i = 0; i < MAP_HEIGHT; i++) {
-        for (int j = 0; j < MAP_WIDTH; j++) {
-            if (fscanf(file, "%d", &game->map[i][j]) != 1) {
-                printf("Failed to read map data!\n");
-                fclose(file);
-                return false;
-            }
+    game->map = malloc(MAX_MAP_SIZE * sizeof(char *));
+    if (!game->map) {
+        perror("Failed to allocate memory for map");
+        fclose(file);
+        return 0;
+    }
+
+    char line[MAX_MAP_SIZE];
+    int row = 0;
+    while (fgets(line, sizeof(line), file) && row < MAX_MAP_SIZE) {
+        game->map[row] = strdup(line);
+        if (!game->map[row]) {
+            perror("Failed to duplicate line");
+            fclose(file);
+            return 0;
         }
+        row++;
     }
 
     fclose(file);
-    return true;
+    return 1;
 }

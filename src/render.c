@@ -1,25 +1,25 @@
-#include "../headers/maze.h"
+#include "../headers/render.h"
+#include <SDL2/SDL.h>
 
-/**
- * render - Render the game state.
- * @game: Pointer to the game structure.
- */
-void render(Game *game) {
-    SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
-    SDL_RenderClear(game->renderer);
+void renderGame(SDLContext *context, Game *game) {
+    SDL_SetRenderDrawColor(context->renderer, 0, 0, 0, 255);
+    SDL_RenderClear(context->renderer);
 
-    // Render map
-    for (int x = 0; x < MAP_WIDTH; x++) {
-        for (int y = 0; y < MAP_HEIGHT; y++) {
-            SDL_Rect rect = {x * 20, y * 20, 20, 20};
-            if (game->map[x][y] == 1) {
-                SDL_SetRenderDrawColor(game->renderer, 255, 255, 255, 255);
-            } else {
-                SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
+    // Render the map
+    SDL_SetRenderDrawColor(context->renderer, 255, 255, 255, 255);
+    for (int y = 0; game->map[y] != NULL; y++) {
+        for (int x = 0; game->map[y][x] != '\0'; x++) {
+            if (game->map[y][x] == '1') {
+                SDL_Rect rect = { x * 10, y * 10, 10, 10 };
+                SDL_RenderFillRect(context->renderer, &rect);
             }
-            SDL_RenderFillRect(game->renderer, &rect);
         }
     }
 
-    SDL_RenderPresent(game->renderer);
+    // Render the player
+    SDL_SetRenderDrawColor(context->renderer, 255, 0, 0, 255);
+    SDL_Rect rect = { (int)game->player.x, (int)game->player.y, 10, 10 };
+    SDL_RenderFillRect(context->renderer, &rect);
+
+    SDL_RenderPresent(context->renderer);
 }

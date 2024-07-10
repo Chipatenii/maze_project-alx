@@ -1,45 +1,35 @@
-#include "../headers/maze.h"
+#include "../headers/player.h"
+#include <math.h>
+#include <stdlib.h>
+#include <string.h>
 
-/**
- * rotatePlayer - Rotates the player's direction vector.
- * @player: Pointer to the Player struct.
- * @angle: The angle to rotate by.
- */
-void rotatePlayer(Player *player, double angle)
-{
-    double oldDirX = player->dirX;
-    player->dirX = player->dirX * cos(angle) - player->dirY * sin(angle);
-    player->dirY = oldDirX * cos(angle) + player->dirY * sin(angle);
+int checkCollision(char **map, float x, float y) {
+    int mapX = (int)x / 10;
+    int mapY = (int)y / 10;
 
-    double oldPlaneX = player->planeX;
-    player->planeX = player->planeX * cos(angle) - player->planeY * sin(angle);
-    player->planeY = oldPlaneX * cos(angle) + player->planeY * sin(angle);
+    return (map[mapY][mapX] == '1');
 }
 
-/**
- * movePlayer - Moves the player forward or backward.
- * @player: Pointer to the Player struct.
- * @map: The game map.
- * @moveSpeed: The speed to move by.
- */
-void movePlayer(Player *player, int map[MAP_WIDTH][MAP_HEIGHT], double moveSpeed)
-{
-    if (map[(int)(player->x + player->dirX * moveSpeed)][(int)player->y] == 0)
-        player->x += player->dirX * moveSpeed;
-    if (map[(int)player->x][(int)(player->y + player->dirY * moveSpeed)] == 0)
-        player->y += player->dirY * moveSpeed;
+void rotatePlayer(Player *player, float angle) {
+    player->angle += angle;
 }
 
-/**
- * strafePlayer - Strafes the player left or right.
- * @player: Pointer to the Player struct.
- * @map: The game map.
- * @moveSpeed: The speed to move by.
- */
-void strafePlayer(Player *player, int map[MAP_WIDTH][MAP_HEIGHT], double moveSpeed)
-{
-    if (map[(int)(player->x + player->planeX * moveSpeed)][(int)player->y] == 0)
-        player->x += player->planeX * moveSpeed;
-    if (map[(int)player->x][(int)(player->y + player->planeY * moveSpeed)] == 0)
-        player->y += player->planeY * moveSpeed;
+void movePlayer(Player *player, char **map, float speed) {
+    float newX = player->x + speed * cos(player->angle);
+    float newY = player->y + speed * sin(player->angle);
+    
+    if (!checkCollision(map, newX, newY)) {
+        player->x = newX;
+        player->y = newY;
+    }
+}
+
+void strafePlayer(Player *player, char **map, float speed) {
+    float newX = player->x + speed * cos(player->angle + M_PI_2);
+    float newY = player->y + speed * sin(player->angle + M_PI_2);
+
+    if (!checkCollision(map, newX, newY)) {
+        player->x = newX;
+        player->y = newY;
+    }
 }
