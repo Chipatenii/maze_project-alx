@@ -1,50 +1,37 @@
 #include "../headers/maze.h"
 
 /**
- * handleInput - Handles input events and updates the game state accordingly.
- * @game: Pointer to the game structure.
+ * handleInput - Handles player input.
+ * @game: Pointer to the Game struct.
  * @running: Pointer to the running flag.
- *
- * Return: void
  */
 void handleInput(Game *game, bool *running)
 {
-    SDL_Event event;
+    SDL_Event e;
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
 
-    while (SDL_PollEvent(&event))
-    {
-        if (event.type == SDL_QUIT)
-        {
+    while (SDL_PollEvent(&e) != 0) {
+        if (e.type == SDL_QUIT) {
             *running = false;
         }
-        else if (event.type == SDL_KEYDOWN)
-        {
-            switch (event.key.keysym.sym)
-            {
-                case SDLK_LEFT:
-                    rotatePlayer(&game->player, -ROTATE_SPEED);
-                    break;
-                case SDLK_RIGHT:
-                    rotatePlayer(&game->player, ROTATE_SPEED);
-                    break;
-                case SDLK_w:
-                    movePlayer(&game->player, game->map, MOVE_SPEED);
-                    break;
-                case SDLK_s:
-                    movePlayer(&game->player, game->map, -MOVE_SPEED);
-                    break;
-                case SDLK_a:
-                    strafePlayer(&game->player, game->map, -MOVE_SPEED);
-                    break;
-                case SDLK_d:
-                    strafePlayer(&game->player, game->map, MOVE_SPEED);
-                    break;
-                case SDLK_ESCAPE:
-                    *running = false;
-                    break;
-                default:
-                    break;
-            }
-        }
+    }
+
+    if (state[SDL_SCANCODE_UP]) {
+        movePlayer(&game->player, game->map, MOVE_SPEED);
+    }
+    if (state[SDL_SCANCODE_DOWN]) {
+        movePlayer(&game->player, game->map, -MOVE_SPEED);
+    }
+    if (state[SDL_SCANCODE_LEFT]) {
+        rotatePlayer(&game->player, ROTATE_SPEED);
+    }
+    if (state[SDL_SCANCODE_RIGHT]) {
+        rotatePlayer(&game->player, -ROTATE_SPEED);
+    }
+    if (state[SDL_SCANCODE_Q]) {
+        strafePlayer(&game->player, game->map, -MOVE_SPEED);
+    }
+    if (state[SDL_SCANCODE_E]) {
+        strafePlayer(&game->player, game->map, MOVE_SPEED);
     }
 }

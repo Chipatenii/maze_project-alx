@@ -1,33 +1,45 @@
 #include "../headers/maze.h"
 
 /**
- * updateGame - Update game state based on input.
- * @game: Pointer to the game structure.
+ * rotatePlayer - Rotates the player's direction vector.
+ * @player: Pointer to the Player struct.
+ * @angle: The angle to rotate by.
  */
-void updateGame(Game *game) {
-    const Uint8 *state = SDL_GetKeyboardState(NULL);
+void rotatePlayer(Player *player, double angle)
+{
+    double oldDirX = player->dirX;
+    player->dirX = player->dirX * cos(angle) - player->dirY * sin(angle);
+    player->dirY = oldDirX * cos(angle) + player->dirY * sin(angle);
 
-    // Move forward
-    if (state[SDL_SCANCODE_UP] && game->map[(int)(game->playerX + game->playerDirX * 0.1)][(int)(game->playerY)] == 0) {
-        game->playerX += game->playerDirX * 0.1;
-        game->playerY += game->playerDirY * 0.1;
-    }
+    double oldPlaneX = player->planeX;
+    player->planeX = player->planeX * cos(angle) - player->planeY * sin(angle);
+    player->planeY = oldPlaneX * cos(angle) + player->planeY * sin(angle);
+}
 
-    // Move backward
-    if (state[SDL_SCANCODE_DOWN] && game->map[(int)(game->playerX - game->playerDirX * 0.1)][(int)(game->playerY)] == 0) {
-        game->playerX -= game->playerDirX * 0.1;
-        game->playerY -= game->playerDirY * 0.1;
-    }
+/**
+ * movePlayer - Moves the player forward or backward.
+ * @player: Pointer to the Player struct.
+ * @map: The game map.
+ * @moveSpeed: The speed to move by.
+ */
+void movePlayer(Player *player, int map[MAP_WIDTH][MAP_HEIGHT], double moveSpeed)
+{
+    if (map[(int)(player->x + player->dirX * moveSpeed)][(int)player->y] == 0)
+        player->x += player->dirX * moveSpeed;
+    if (map[(int)player->x][(int)(player->y + player->dirY * moveSpeed)] == 0)
+        player->y += player->dirY * moveSpeed;
+}
 
-    // Move left
-    if (state[SDL_SCANCODE_LEFT] && game->map[(int)(game->playerX)][(int)(game->playerY + game->playerDirX * 0.1)] == 0) {
-        game->playerX -= game->playerDirY * 0.1;
-        game->playerY += game->playerDirX * 0.1;
-    }
-
-    // Move right
-    if (state[SDL_SCANCODE_RIGHT] && game->map[(int)(game->playerX)][(int)(game->playerY - game->playerDirX * 0.1)] == 0) {
-        game->playerX += game->playerDirY * 0.1;
-        game->playerY -= game->playerDirX * 0.1;
-    }
+/**
+ * strafePlayer - Strafes the player left or right.
+ * @player: Pointer to the Player struct.
+ * @map: The game map.
+ * @moveSpeed: The speed to move by.
+ */
+void strafePlayer(Player *player, int map[MAP_WIDTH][MAP_HEIGHT], double moveSpeed)
+{
+    if (map[(int)(player->x + player->planeX * moveSpeed)][(int)player->y] == 0)
+        player->x += player->planeX * moveSpeed;
+    if (map[(int)player->x][(int)(player->y + player->planeY * moveSpeed)] == 0)
+        player->y += player->planeY * moveSpeed;
 }
