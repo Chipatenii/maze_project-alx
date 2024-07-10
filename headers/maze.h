@@ -11,6 +11,8 @@
 #define SCREEN_HEIGHT 480
 #define MOVE_SPEED 0.05
 #define ROTATE_SPEED 0.05
+#define MAP_WIDTH 24
+#define MAP_HEIGHT 24
 
 typedef struct {
     double x, y;
@@ -27,7 +29,7 @@ typedef struct {
 typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
-    int map[24][24];
+    int map[MAP_HEIGHT][MAP_WIDTH];
     Player player;
     Textures textures;
 } Game;
@@ -35,9 +37,10 @@ typedef struct {
 bool initSDL(Game *game);
 void closeSDL(Game *game);
 void handleInput(Game *game, bool *running);
-void movePlayer(Player *player, int map[24][24], double moveSpeed);
-void strafePlayer(Player *player, int map[24][24], double moveSpeed);
+void movePlayer(Player *player, int map[MAP_HEIGHT][MAP_WIDTH], double moveSpeed);
+void strafePlayer(Player *player, int map[MAP_HEIGHT][MAP_WIDTH], double moveSpeed);
 void rotatePlayer(Player *player, double angle);
 SDL_Texture* loadTexture(SDL_Renderer *renderer, const char *path);
+bool parseMap(Game *game, const char *filePath);
 
 #endif /* MAZE_H */

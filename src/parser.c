@@ -2,17 +2,17 @@
 
 /**
  * parseMap - Parses the map from a file.
- * @game: A pointer to the Game structure.
- * @filename: The name of the file to parse.
+ * @game: Pointer to the game structure.
+ * @filePath: Path to the map file.
  *
- * Return: true if successful, false otherwise.
+ * Return: true if parsing is successful, false otherwise.
  */
-bool parseMap(Game *game, const char *filename)
+bool parseMap(Game *game, const char *filePath)
 {
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filePath, "r");
     if (!file)
     {
-        printf("Unable to open map file %s!\n", filename);
+        SDL_Log("Unable to open file: %s", filePath);
         return false;
     }
 
@@ -20,19 +20,14 @@ bool parseMap(Game *game, const char *filename)
     {
         for (int x = 0; x < MAP_WIDTH; x++)
         {
-            int c = fgetc(file);
-            if (c == '1')
-                game->map[x][y] = 1;
-            else if (c == '0')
-                game->map[x][y] = 0;
-            else if (c == '\n')
-                x--;
-            else
+            int value;
+            if (fscanf(file, "%d", &value) != 1)
             {
-                printf("Invalid map format!\n");
+                SDL_Log("Invalid map format in file: %s", filePath);
                 fclose(file);
                 return false;
             }
+            game->map[y][x] = value;
         }
     }
 
