@@ -13,19 +13,19 @@
 #define MAP_WIDTH 10
 #define MAP_HEIGHT 10
 
-typedef struct Textures {
+typedef struct {
     SDL_Texture *wall;
     SDL_Texture *floor;
     SDL_Texture *ceiling;
 } Textures;
 
-typedef struct Game {
+typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
     Textures textures;
-    int map[MAP_WIDTH][MAP_HEIGHT];
-    int playerX;
-    int playerY;
+    double playerX, playerY; // Player position
+    double playerDirX, playerDirY; // Player direction
+    double planeX, planeY; // Camera plane
 } Game;
 
 bool initSDL(Game *game);

@@ -1,28 +1,20 @@
-# Makefile for maze project
-
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic `sdl2-config --cflags`
 LDFLAGS = `sdl2-config --libs` -lSDL2_image -lm
-SRC_DIR = src
-BIN_DIR = bin
-HEADERS_DIR = headers
-IMAGES_DIR = images
+SRC = src/init.c src/player.c src/parser.c src/main.c src/input.c src/render.c
+OBJ = $(SRC:.c=.o)
+BIN = bin
 
-SRCS = $(wildcard $(SRC_DIR)/*.c)
-OBJS = $(patsubst $(SRC_DIR)/%.c, $(BIN_DIR)/%.o, $(SRCS))
+all: $(BIN) $(BIN)/maze
 
-all: $(BIN_DIR) maze
+$(BIN):
+	mkdir -p $(BIN)
 
-$(BIN_DIR):
-	mkdir -p $(BIN_DIR)
+$(BIN)/maze: $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-maze: $(OBJS)
-	$(CC) $(OBJS) -o $@ $(LDFLAGS)
-
-$(BIN_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS_DIR)/maze.h
+$(BIN)/%.o: src/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(BIN_DIR) maze
-
-.PHONY: all clean
+	rm -rf $(BIN)/*.o $(BIN)/maze
