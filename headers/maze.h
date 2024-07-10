@@ -7,40 +7,33 @@
 #include <stdio.h>
 #include <math.h>
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
-#define MOVE_SPEED 0.05
-#define ROTATE_SPEED 0.05
-#define MAP_WIDTH 24
-#define MAP_HEIGHT 24
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+#define TILE_SIZE 64
+#define MAP_WIDTH 10
+#define MAP_HEIGHT 10
 
-typedef struct {
-    double x, y;
-    double dirX, dirY;
-    double planeX, planeY;
-} Player;
-
-typedef struct {
+typedef struct Textures {
     SDL_Texture *wall;
     SDL_Texture *floor;
     SDL_Texture *ceiling;
 } Textures;
 
-typedef struct {
+typedef struct Game {
     SDL_Window *window;
     SDL_Renderer *renderer;
-    int map[MAP_HEIGHT][MAP_WIDTH];
-    Player player;
     Textures textures;
+    int map[MAP_WIDTH][MAP_HEIGHT];
+    int playerX;
+    int playerY;
 } Game;
 
 bool initSDL(Game *game);
+SDL_Texture *loadTexture(SDL_Renderer *renderer, const char *path);
 void closeSDL(Game *game);
+bool parseMap(Game *game, const char *filename);
 void handleInput(Game *game, bool *running);
-void movePlayer(Player *player, int map[MAP_HEIGHT][MAP_WIDTH], double moveSpeed);
-void strafePlayer(Player *player, int map[MAP_HEIGHT][MAP_WIDTH], double moveSpeed);
-void rotatePlayer(Player *player, double angle);
-SDL_Texture* loadTexture(SDL_Renderer *renderer, const char *path);
-bool parseMap(Game *game, const char *filePath);
+void updateGame(Game *game);
+void render(Game *game);
 
 #endif /* MAZE_H */

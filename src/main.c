@@ -1,50 +1,33 @@
 #include "../headers/maze.h"
 
 /**
- * main - Entry point of the program.
- * @argc: Argument count.
- * @argv: Argument vector.
+ * main - Entry point for the maze game.
  *
- * Return: 0 on success, or an error code on failure.
+ * This function initializes SDL, parses the game map, and starts the game loop.
+ *
+ * Return: 0 on success, non-zero on failure.
  */
 int main(int argc, char *argv[])
 {
-    (void)argc;  // Mark argc as used to avoid compiler warning
-    (void)argv;  // Mark argv as used to avoid compiler warning
-
     Game game;
     bool running = true;
 
+    /* Initialize SDL and check for initialization success */
     if (!initSDL(&game))
+    {
+        printf("Failed to initialize!\n");
         return 1;
+    }
 
-    game.player.posX = 22.0;
-    game.player.posY = 12.0;
-    game.player.dirX = -1.0;
-    game.player.dirY = 0.0;
-    game.player.planeX = 0.0;
-    game.player.planeY = 0.66;
+    /* Parse the game map from file */
+    if (!parseMap(&game, "map/map1.txt"))
+    {
+        closeSDL(&game);
+        return 1;
+    }
 
-    int map[MAP_WIDTH][MAP_HEIGHT] = {
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-        {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-    };
-
-    for (int x = 0; x < MAP_WIDTH; x++)
-        for (int y = 0; y < MAP_HEIGHT; y++)
-            game.map[x][y] = map[x][y];
+    game.playerX = 1; // Initial player position
+    game.playerY = 1;
 
     /* Game loop */
     while (running)
@@ -54,6 +37,7 @@ int main(int argc, char *argv[])
         render(&game);
     }
 
+    /* Clean up and exit */
     closeSDL(&game);
     return 0;
 }
