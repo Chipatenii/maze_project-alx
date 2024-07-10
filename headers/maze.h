@@ -26,6 +26,7 @@ typedef struct {
     double playerX, playerY; // Player position
     double playerDirX, playerDirY; // Player direction
     double planeX, planeY; // Camera plane
+    int map[MAP_WIDTH][MAP_HEIGHT]; // Game map
 } Game;
 
 bool initSDL(Game *game);

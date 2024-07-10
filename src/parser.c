@@ -1,33 +1,26 @@
 #include "../headers/maze.h"
 
 /**
- * parseMap - Parses the game map from a file.
- * @game: A pointer to the Game structure.
- * @filename: The name of the map file.
+ * parseMap - Parse the game map from a file.
+ * @game: Pointer to the game structure.
+ * @filename: Path to the map file.
  *
  * Return: true if successful, false otherwise.
  */
-bool parseMap(Game *game, const char *filename)
-{
+bool parseMap(Game *game, const char *filename) {
     FILE *file = fopen(filename, "r");
-    if (!file)
-    {
-        printf("Failed to open map file: %s\n", filename);
+    if (!file) {
+        printf("Failed to open map file!\n");
         return false;
     }
 
-    for (int y = 0; y < MAP_HEIGHT; y++)
-    {
-        for (int x = 0; x < MAP_WIDTH; x++)
-        {
-            int tile;
-            if (fscanf(file, "%1d", &tile) != 1)
-            {
-                printf("Failed to read map data at (%d, %d)\n", x, y);
+    for (int i = 0; i < MAP_HEIGHT; i++) {
+        for (int j = 0; j < MAP_WIDTH; j++) {
+            if (fscanf(file, "%d", &game->map[i][j]) != 1) {
+                printf("Failed to read map data!\n");
                 fclose(file);
                 return false;
             }
-            game->map[x][y] = tile;
         }
     }
 
