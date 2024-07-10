@@ -12,6 +12,9 @@
 #define MAP_WIDTH 24
 #define MAP_HEIGHT 24
 
+#define ROTATE_SPEED 0.05
+#define MOVE_SPEED 0.1
+
 typedef struct {
     double x;
     double y;
