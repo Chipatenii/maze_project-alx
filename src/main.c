@@ -7,29 +7,30 @@
  *
  * Return: 0 on success, non-zero on failure.
  */
-int main(int argc, char *argv[]) {
+int main(void)
+{
     Game game;
     bool running = true;
 
-    // Initialize SDL and check for initialization success
+    /* Initialize SDL and check for initialization success */
     if (!initSDL(&game)) {
         return 1;
     }
 
-    // Parse the game map from file
+    /* Parse the game map from file */
     if (!parseMap(&game, "map/map1.txt")) {
         closeSDL(&game);
         return 1;
     }
 
-    // Game loop
+    /* Game loop */
     while (running) {
         handleInput(&game, &running);
         updateGame(&game);
         render(&game);
     }
 
-    // Clean up and exit
+    /* Clean up and exit */
     closeSDL(&game);
     return 0;
 }
