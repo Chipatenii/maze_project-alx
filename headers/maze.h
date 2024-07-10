@@ -7,11 +7,9 @@
 #include <stdio.h>
 #include <math.h>
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
-#define MAP_WIDTH 24
-#define MAP_HEIGHT 24
-#define MOVE_SPEED 0.1
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+#define MOVE_SPEED 0.05
 #define ROTATE_SPEED 0.05
 
 typedef struct {
@@ -21,17 +19,25 @@ typedef struct {
 } Player;
 
 typedef struct {
+    SDL_Texture *wall;
+    SDL_Texture *floor;
+    SDL_Texture *ceiling;
+} Textures;
+
+typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
     int map[24][24];
     Player player;
+    Textures textures;
 } Game;
 
-void initSDL(Game *game);
+bool initSDL(Game *game);
 void closeSDL(Game *game);
 void handleInput(Game *game, bool *running);
 void movePlayer(Player *player, int map[24][24], double moveSpeed);
 void strafePlayer(Player *player, int map[24][24], double moveSpeed);
 void rotatePlayer(Player *player, double angle);
+SDL_Texture* loadTexture(SDL_Renderer *renderer, const char *path);
 
 #endif /* MAZE_H */
