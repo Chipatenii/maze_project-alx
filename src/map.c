@@ -1,21 +1,28 @@
-#include "map.h"
+#include "../headers/map.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-Map* load_map(const char *filename) {
+/**
+ * load_map - Load the map from a file
+ * @filename: Path to the map file
+ * Return: Pointer to the loaded map structure
+ */
+Map *load_map(const char *filename) {
     FILE *file = fopen(filename, "r");
-    if (!file) {
-        return NULL;
-    }
+    if (!file) return NULL;
+
+    int rows = 0, cols = 0;
+    fscanf(file, "%d %d", &rows, &cols);
 
     Map *map = malloc(sizeof(Map));
-    fscanf(file, "%d %d", &map->width, &map->height);
-
-    map->data = malloc(map->height * sizeof(int*));
-    for (int i = 0; i < map->height; i++) {
-        map->data[i] = malloc(map->width * sizeof(int));
-        for (int j = 0; j < map->width; j++) {
-            fscanf(file, "%d", &map->data[i][j]);
+    if (!map) return NULL;
+    map->rows = rows;
+    map->cols = cols;
+    map->arr = malloc(rows * sizeof(int *));
+    for (int i = 0; i < rows; i++) {
+        map->arr[i] = malloc(cols * sizeof(int));
+        for (int j = 0; j < cols; j++) {
+            fscanf(file, "%d", &map->arr[i][j]);
         }
     }
 
@@ -23,10 +30,14 @@ Map* load_map(const char *filename) {
     return map;
 }
 
+/**
+ * free_map - Free the allocated memory for the map
+ * @map: Pointer to the map structure
+ */
 void free_map(Map *map) {
-    for (int i = 0; i < map->height; i++) {
-        free(map->data[i]);
+    for (int i = 0; i < map->rows; i++) {
+        free(map->arr[i]);
     }
-    free(map->data);
+    free(map->arr);
     free(map);
 }

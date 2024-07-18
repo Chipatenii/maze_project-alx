@@ -1,40 +1,28 @@
-#include "player.h"
+#include "../headers/player.h"
+#include "../headers/map.h"
 
-void initialize_player(Player *player, float posX, float posY) {
-    initialize_camera(&player->camera, posX, posY, -1.0, 0.0, 0.0, 0.66);
-    player->speed = 0.05;
+/**
+ * move_forward - Move the player forward
+ * @player: Pointer to the player structure
+ * @camera: Pointer to the camera structure
+ * @map: Pointer to the map structure
+ */
+void move_forward(Player *player, Camera *camera, Map *map) {
+    if (map->arr[(int)(player->x + camera->dirX * player->speed)][(int)player->y] == 0)
+        player->x += camera->dirX * player->speed;
+    if (map->arr[(int)player->x][(int)(player->y + camera->dirY * player->speed)] == 0)
+        player->y += camera->dirY * player->speed;
 }
 
-void move_player(Player *player, Map *map, float moveX, float moveY) {
-    if (map->data[(int)(player->camera.x + moveX * player->speed)][(int)player->camera.y] == 0)
-        player->camera.x += moveX * player->speed;
-    if (map->data[(int)player->camera.x][(int)(player->camera.y + moveY * player->speed)] == 0)
-        player->camera.y += moveY * player->speed;
-}
-
-void handle_input(Player *player, SDL_Event event) {
-    if (event.type == SDL_KEYDOWN) {
-        switch (event.key.keysym.sym) {
-            case SDLK_LEFT:
-                rotate_camera(&player->camera, -0.05);
-                break;
-            case SDLK_RIGHT:
-                rotate_camera(&player->camera, 0.05);
-                break;
-            case SDLK_UP:
-                move_player(player, map, player->camera.dirX, player->camera.dirY);
-                break;
-            case SDLK_DOWN:
-                move_player(player, map, -player->camera.dirX, -player->camera.dirY);
-                break;
-            case SDLK_a:
-                move_player(player, map, -player->camera.dirY, player->camera.dirX);
-                break;
-            case SDLK_d:
-                move_player(player, map, player->camera.dirY, -player->camera.dirX);
-                break;
-            default:
-                break;
-        }
-    }
+/**
+ * move_backward - Move the player backward
+ * @player: Pointer to the player structure
+ * @camera: Pointer to the camera structure
+ * @map: Pointer to the map structure
+ */
+void move_backward(Player *player, Camera *camera, Map *map) {
+    if (map->arr[(int)(player->x - camera->dirX * player->speed)][(int)player->y] == 0)
+        player->x -= camera->dirX * player->speed;
+    if (map->arr[(int)player->x][(int)(player->y - camera->dirY * player->speed)] == 0)
+        player->y -= camera->dirY * player->speed;
 }

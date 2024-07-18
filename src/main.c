@@ -1,49 +1,42 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "sdl_utils.h"
-#include "raycasting.h"
-#include "player.h"
-#include "map.h"
-#include "textures.h"
-#include "rain.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "../headers/camera.h"
+#include "../headers/map.h"
+#include "../headers/player.h"
+#include "../headers/raycasting.h"
+#include "../headers/sdl_utils.h"
+#include "../headers/textures.h"
+#include "../headers/rain.h"
 
 #define WINDOW_WIDTH 800
 #define WINDOW_HEIGHT 600
 
 int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        printf("Usage: %s <map file>\n", argv[0]);
-        return -1;
+    SDL_Window *window = init_window("Maze Game", WINDOW_WIDTH, WINDOW_HEIGHT);
+    SDL_Renderer *renderer = init_renderer(window);
+
+    Map *map = load_map("../maps/map.txt");
+    if (map == NULL) {
+        fprintf(stderr, "Failed to load map.\n");
+        cleanup(window, renderer);
+        return EXIT_FAILURE;
     }
 
-    SDL_Window *window = NULL;
-    SDL_Renderer *renderer = NULL;
+    Camera camera = { .x = 1.5, .y = 1.5, .dirX = -1, .dirY = 0, .planeX = 0, .planeY = 0.66 };
+    Player player = { .x = 1.5, .y = 1.5, .speed = 0.05 };
 
-    if (init_SDL(&window, &renderer, WINDOW_WIDTH, WINDOW_HEIGHT) != 0) {
-        printf("Failed to initialize SDL\n");
-        return -1;
-    }
-
-    Map *map = load_map(argv[1]);
-    if (!map) {
-        printf("Failed to load map\n");
-        cleanup_SDL(window, renderer);
-        return -1;
-    }
-
-    Textures textures;
-    if (load_textures(renderer, &textures) != 0) {
-        printf("Failed to load textures\n");
+    Textures *textures = load_textures(renderer);
+    if (textures == NULL) {
+        fprintf(stderr, "Failed to load textures.\n");
         free_map(map);
-        cleanup_SDL(window, renderer);
-        return -1;
+        cleanup(window, renderer);
+        return EXIT_FAILURE;
     }
-
-    Player player;
-    initialize_player(&player, 22.0, 12.0);
 
     Rain rain;
-    initialize_rain(&rain, renderer);
+    init_rain(&rain, 100);
 
     int running = 1;
     SDL_Event event;
@@ -51,24 +44,27 @@ int main(int argc, char *argv[]) {
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 running = 0;
-            } else if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_r) {
-                toggle_rain(&rain);
-            } else {
-                handle_input(&player, event);
             }
         }
+
+        const Uint8 *state = SDL_GetKeyboardState(NULL);
+        if (state[SDL_SCANCODE_W]) move_forward(&player, &camera, map);
+        if (state[SDL_SCANCODE_S]) move_backward(&player, &camera, map);
+        if (state[SDL_SCANCODE_A]) rotate_left(&camera, player.speed);
+        if (state[SDL_SCANCODE_D]) rotate_right(&camera, player.speed);
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         SDL_RenderClear(renderer);
 
-        render_scene(renderer, &player.camera, map, &textures);
-        render_rain(&rain, renderer);
+        render_rain(renderer, &rain);
+        update_rain(&rain);
+        render_raycasting(renderer, map, &camera, textures);
 
         SDL_RenderPresent(renderer);
     }
 
-    free_textures(&textures);
+    free_textures(textures);
     free_map(map);
-    cleanup_SDL(window, renderer);
+    cleanup(window, renderer);
     return 0;
 }

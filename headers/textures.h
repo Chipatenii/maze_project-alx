@@ -12,7 +12,7 @@ typedef struct {
     SDL_Texture *rain;
 } Textures;
 
-int load_textures(SDL_Renderer *renderer, Textures *textures);
+Textures *load_textures(SDL_Renderer *renderer);
 void free_textures(Textures *textures);
 
 #endif

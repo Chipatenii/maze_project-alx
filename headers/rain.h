@@ -4,12 +4,17 @@
 #include <SDL2/SDL.h>
 
 typedef struct {
-    SDL_Texture *texture;
-    int is_raining;
+    int x, y;
+    int velocity;
+} Raindrop;
+
+typedef struct {
+    Raindrop *drops;
+    int count;
 } Rain;
 
-void initialize_rain(Rain *rain, SDL_Renderer *renderer);
-void toggle_rain(Rain *rain);
-void render_rain(Rain *rain, SDL_Renderer *renderer);
+void init_rain(Rain *rain, int count);
+void update_rain(Rain *rain);
+void render_rain(SDL_Renderer *renderer, Rain *rain);
 
 #endif

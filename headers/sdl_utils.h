@@ -2,9 +2,9 @@
 #define SDL_UTILS_H
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 
-int init_SDL(SDL_Window **window, SDL_Renderer **renderer, int width, int height);
-void cleanup_SDL(SDL_Window *window, SDL_Renderer *renderer);
+SDL_Window *init_window(const char *title, int width, int height);
+SDL_Renderer *init_renderer(SDL_Window *window);
+void cleanup(SDL_Window *window, SDL_Renderer *renderer);
 
 #endif

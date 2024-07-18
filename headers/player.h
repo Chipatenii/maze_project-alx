@@ -1,15 +1,14 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "camera.h"
+#include "../headers/map.h"
 
 typedef struct {
-    Camera camera;
-    float speed;
+    double x, y;   // position
+    double speed;  // movement speed
 } Player;
 
-void initialize_player(Player *player, float posX, float posY);
-void move_player(Player *player, Map *map, float moveX, float moveY);
-void handle_input(Player *player, SDL_Event event);
+void move_forward(Player *player, Camera *camera, Map *map);
+void move_backward(Player *player, Camera *camera, Map *map);
 
 #endif

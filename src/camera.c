@@ -1,21 +1,31 @@
-#include "camera.h"
-#include <math.h>
+#include "../headers/camera.h"
 
-void initialize_camera(Camera *camera, float posX, float posY, float dirX, float dirY, float planeX, float planeY) {
-    camera->x = posX;
-    camera->y = posY;
-    camera->dirX = dirX;
-    camera->dirY = dirY;
-    camera->planeX = planeX;
-    camera->planeY = planeY;
+/**
+ * rotate_left - Rotate the camera to the left
+ * @camera: Pointer to the camera structure
+ * @rotSpeed: Rotation speed
+ */
+void rotate_left(Camera *camera, double rotSpeed) {
+    double oldDirX = camera->dirX;
+    camera->dirX = camera->dirX * cos(rotSpeed) - camera->dirY * sin(rotSpeed);
+    camera->dirY = oldDirX * cos(rotSpeed) + camera->dirY * sin(rotSpeed);
+
+    double oldPlaneX = camera->planeX;
+    camera->planeX = camera->planeX * cos(rotSpeed) - camera->planeY * sin(rotSpeed);
+    camera->planeY = oldPlaneX * cos(rotSpeed) + camera->planeY * sin(rotSpeed);
 }
 
-void rotate_camera(Camera *camera, float angle) {
-    float oldDirX = camera->dirX;
-    camera->dirX = camera->dirX * cos(angle) - camera->dirY * sin(angle);
-    camera->dirY = oldDirX * sin(angle) + camera->dirY * cos(angle);
+/**
+ * rotate_right - Rotate the camera to the right
+ * @camera: Pointer to the camera structure
+ * @rotSpeed: Rotation speed
+ */
+void rotate_right(Camera *camera, double rotSpeed) {
+    double oldDirX = camera->dirX;
+    camera->dirX = camera->dirX * cos(-rotSpeed) - camera->dirY * sin(-rotSpeed);
+    camera->dirY = oldDirX * cos(-rotSpeed) + camera->dirY * sin(-rotSpeed);
 
-    float oldPlaneX = camera->planeX;
-    camera->planeX = camera->planeX * cos(angle) - camera->planeY * sin(angle);
-    camera->planeY = oldPlaneX * sin(angle) + camera->planeY * cos(angle);
+    double oldPlaneX = camera->planeX;
+    camera->planeX = camera->planeX * cos(-rotSpeed) - camera->planeY * sin(-rotSpeed);
+    camera->planeY = oldPlaneX * cos(-rotSpeed) + camera->planeY * sin(-rotSpeed);
 }
