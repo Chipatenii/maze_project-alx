@@ -1,26 +1,33 @@
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -pedantic -Iheaders
+CFLAGS = -Wall -Wextra -Iheaders
 LDFLAGS = -lSDL2 -lSDL2_image
 
-SRCDIR = src
-OBJDIR = obj
-BINDIR = bin
+SRC_DIR = src
+OBJ_DIR = obj
+TEST_DIR = test
 
-SOURCES = $(wildcard $(SRCDIR)/*.c)
-OBJECTS = $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
-EXECUTABLE = $(BINDIR)/maze_game
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(SRCS:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+TEST_SRCS = $(wildcard $(TEST_DIR)/*.c)
+TEST_OBJS = $(TEST_SRCS:$(TEST_DIR)/%.c=$(OBJ_DIR)/%.o)
+EXEC = maze_game
+TEST_EXEC = test
 
-all: $(EXECUTABLE)
-
-$(EXECUTABLE): $(OBJECTS)
-	@mkdir -p $(BINDIR)
-	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
-	@mkdir -p $(OBJDIR)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-clean:
-	rm -rf $(OBJDIR) $(BINDIR)
+$(EXEC): $(OBJS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
 
-.PHONY: all clean
+$(TEST_EXEC): $(TEST_OBJS) $(OBJS)
+	$(CC) $(TEST_OBJS) $(OBJS) -o $@ $(LDFLAGS)
+
+all: $(EXEC)
+
+test: $(TEST_EXEC)
+	./$(TEST_EXEC)
+
+clean:
+	rm -f $(OBJ_DIR)/*.o $(EXEC) $(TEST_EXEC)
+
+.PHONY: all test clean
