@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
     SDL_Window *window = init_window("Maze Game", WINDOW_WIDTH, WINDOW_HEIGHT);
     SDL_Renderer *renderer = init_renderer(window);
 
-    Map *map = load_map("../maps/map.txt");
+    Map *map = load_map("maps/map.txt");
     if (map == NULL) {
         fprintf(stderr, "Failed to load map.\n");
         cleanup(window, renderer);

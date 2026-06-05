@@ -1,7 +1,7 @@
 The ALX Project - The Maze Game
 --------------
 
-![image]([https:](https://github.com/Chipatenii/maze_project-alx/blob/main/images/wall.bmp)
+![image](https://github.com/Chipatenii/maze_project-alx/blob/main/images/wall.png)
 
 The goal of this __Maze Game Project__ is to create a 3D game using the raycasting technique.
 Raycasting is a rendering technique used in computer graphics to simulate
@@ -60,7 +60,29 @@ The player has the capability to move in multiple directions and simultaneously 
 Clone this repository:
 
 ```
-git clone [https://github.com/Chipatenii/maze_project-alx]
+git clone https://github.com/Chipatenii/maze_project-alx
+cd maze_project-alx
+```
+
+## Build and Run
+
+Install dependencies (Ubuntu/Debian):
+
+```
+sudo apt-get install libsdl2-dev libsdl2-image-dev
+```
+
+Build and run from the repository root so asset paths resolve correctly:
+
+```
+make
+./maze_game
+```
+
+## Tests
+
+```
+make test
 ```
 
 ## The Project Controls
@@ -73,12 +95,6 @@ git clone [https://github.com/Chipatenii/maze_project-alx]
 
 ```D```: Rotate right.
 
-```Mouse movement left/right```: Adjust your view to the left or right.
-
-```M```: Disable the map display. Clicking won't show the 2D map.
-
-```N```: Enable the map display. The 2D map will become visible once more if it was hidden.
-
 ## The Project Directories
 
 [`headers`](https://github.com/Chipatenii/maze_project-alx/tree/main/headers)
@@ -89,7 +105,7 @@ All the header files are in here.
 
 This contains all image files.
 
-[`maps`](https://github.com/HBIbidunni/alx-maze_project/tree/master/maps)
+[`maps`](https://github.com/Chipatenii/maze_project-alx/tree/main/maps)
 
 This will be used by the program to output the map layout using the data map files
 
@@ -97,7 +113,7 @@ This will be used by the program to output the map layout using the data map fil
 
 All the source code files written in C are in this folder.
 
-[`tests`](https://github.com/Chipatenii/maze_project-alx/tree/main/tests)
+[`test`](https://github.com/Chipatenii/maze_project-alx/tree/main/test)
 
 This folder contains the SDL2 test file.
 
@@ -105,7 +121,7 @@ This folder contains the SDL2 test file.
 
 - Begin by examining the source files located within the "src" directory and the header files in the "header" directory.
 
-- Duplicate the repository and establish a new branch using the following command: __$ git checkout git clone [https://github.com/Chipatenii/maze_project-alx] -b [name_of_new_branch]__.
+- Duplicate the repository and establish a new branch using the following command: __$ git checkout -b [name_of_new_branch]__.
 
 - Introduce a new feature, resolve any existing bugs, or undertake code refactoring as needed.
 

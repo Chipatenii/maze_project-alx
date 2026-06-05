@@ -5,7 +5,7 @@
 #include "../headers/camera.h"
 
 void test_map_loading() {
-    Map *map = load_map("../maps/map.txt");
+    Map *map = load_map("maps/map.txt");
     assert(map != NULL);
     assert(map->rows > 0);
     assert(map->cols > 0);
@@ -14,7 +14,7 @@ void test_map_loading() {
 }
 
 void test_player_movement() {
-    Map *map = load_map("../maps/map.txt");
+    Map *map = load_map("maps/map.txt");
     Camera camera = { .x = 1.5, .y = 1.5, .dirX = -1, .dirY = 0, .planeX = 0, .planeY = 0.66 };
     Player player = { .x = 1.5, .y = 1.5, .speed = 0.05 };
 
