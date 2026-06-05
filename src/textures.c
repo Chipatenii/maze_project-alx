@@ -10,12 +10,12 @@ Textures *load_textures(SDL_Renderer *renderer) {
     Textures *textures = malloc(sizeof(Textures));
     if (!textures) return NULL;
 
-    textures->wall = IMG_LoadTexture(renderer, "../images/wall.png");
-    textures->floor = IMG_LoadTexture(renderer, "../images/floor.png");
-    textures->ceiling = IMG_LoadTexture(renderer, "../images/ceiling.png");
-    textures->weapon = IMG_LoadTexture(renderer, "../images/weapon.png");
-    textures->enemy = IMG_LoadTexture(renderer, "../images/enemy.png");
-    textures->rain = IMG_LoadTexture(renderer, "../images/rain.png");
+    textures->wall = IMG_LoadTexture(renderer, "images/wall.png");
+    textures->floor = IMG_LoadTexture(renderer, "images/floor.png");
+    textures->ceiling = IMG_LoadTexture(renderer, "images/ceiling.png");
+    textures->weapon = IMG_LoadTexture(renderer, "images/weapon.png");
+    textures->enemy = IMG_LoadTexture(renderer, "images/enemy.png");
+    textures->rain = IMG_LoadTexture(renderer, "images/rain.png");
 
     if (!textures->wall || !textures->floor || !textures->ceiling || !textures->weapon || !textures->enemy || !textures->rain) {
         free_textures(textures);

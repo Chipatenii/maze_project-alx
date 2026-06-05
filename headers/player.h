@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include "../headers/camera.h"
 #include "../headers/map.h"
 
 typedef struct {

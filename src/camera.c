@@ -1,4 +1,5 @@
 #include "../headers/camera.h"
+#include <math.h>
 
 /**
  * rotate_left - Rotate the camera to the left
